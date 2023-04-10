@@ -33,7 +33,7 @@ function EmployeeSalary() {
   return (
     <Box w='100%'
     h='1000px'
-    bgGradient='linear(to-r, blue.400, purple.500, blue.300)'>
+    bgGradient='linear(to-r, blue.200, blue.200, purple.300)'>
 
     <Heading color={"grey.100"} fontFamily={"Times new roman"} marginBottom={"2em"} textAlign="center">  
     {/* <div className="App"> */}
