@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { calculateNetSalary } from "./salaryUtils";
+import { Box, Heading } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 function EmployeeSalary() {
   const [grossSalary, setGrossSalary] = useState(0);
@@ -9,57 +11,9 @@ function EmployeeSalary() {
   const [taxDeduction, setTaxDeduction] = useState(0);
   const [netSalary, setNetSalary] = useState(0);
 
-  // function calculateNetSalary() {
-  //   const nhifRates = [0, 150, 300, 400, 500, 600, 750, 850, 900, 1000];
-  //   const nhifDeductions = [0, 150, 300, 400, 500, 600, 750, 850, 900, 1000];
+  
 
-  //   let nhifDeduction = 0;
-  //   let nssfDeduction = 0;
-  //   let taxableIncome = 0;
-  //   let taxDeduction = 0;
-  //   let netSalary = 0;
-
-  //   if (grossSalary <= 6000) {
-  //     nssfDeduction = 0.06 * grossSalary;
-  //   } else if (grossSalary > 6000 && grossSalary <= 18000) {
-  //     nssfDeduction = 360;
-  //   } else if (grossSalary > 18000) {
-  //     nssfDeduction = 480;
-  //   }
-
-  //   for (let i = 0; i < nhifRates.length; i++) {
-  //     if (grossSalary <= nhifRates[i]) {
-  //       nhifDeduction = nhifDeductions[i];
-  //       break;
-  //     }
-  //   }
-
-  //   taxableIncome = grossSalary - nssfDeduction - nhifDeduction - 1408;
-
-  //   if (taxableIncome <= 12298) {
-  //     taxDeduction = 0;
-  //   } else if (taxableIncome > 12298 && taxableIncome <= 23885) {
-  //     taxDeduction = 0.1 * (taxableIncome - 12298);
-  //   } else if (taxableIncome > 23885 && taxableIncome <= 35472) {
-  //     taxDeduction = 0.15 * (taxableIncome - 23885) + 1159;
-  //   } else if (taxableIncome > 35472 && taxableIncome <= 47059) {
-  //     taxDeduction = 0.2 * (taxableIncome - 35472) + 2894;
-  //   } else if (taxableIncome > 47059 && taxableIncome <= 58646) {
-  //     taxDeduction = 0.25 * (taxableIncome - 47059) + 4894;
-  //   } else if (taxableIncome > 58646 && taxableIncome <= 70833) {
-  //     taxDeduction = 0.3 * (taxableIncome - 58646) + 7549;
-  //   } else {
-  //     taxDeduction = 0.35 * (taxableIncome - 70833) + 13797;
-  //   }
-
-  //   netSalary = grossSalary - nssfDeduction - nhifDeduction - taxDeduction;
-
-  //   setNhifDeduction(nhifDeduction);
-  //   setNssfDeduction(nssfDeduction);
-  //   setTaxableIncome(taxableIncome);
-  //   setTaxDeduction(taxDeduction);
-  //   setNetSalary(netSalary);
-  // }
+  
 
   function handleCalculateNetSalary() {
     const {
@@ -77,42 +31,79 @@ function EmployeeSalary() {
   }
 
   return (
-    <div className="App">
+    <Box w='100%'
+    h='1000px'
+    bgGradient='linear(to-r, blue.400, purple.500, blue.300)'>
+
+    <Heading color={"grey.100"} fontFamily={"Times new roman"} marginBottom={"2em"} textAlign="center">  
+    {/* <div className="App"> */}
       <h1>Salary Calculator</h1>
+      </Heading>
+      
       <form>
-        <label>
-          Gross Salary:
-          <input
-            type="number"
-            value={grossSalary}
-            onChange={(e) => setGrossSalary(e.target.value)}
-          />
-        </label>
-        <br />
-        <br />
-        <button type="button" onClick={handleCalculateNetSalary}>
+        <Box>
+      <FormControl>
+        <FormLabel>Gross Salary:
+        <Input type="text" value={grossSalary}
+            onChange={(e) => setGrossSalary(e.target.value)} width border="2px solid black"/></FormLabel><br />
+      </FormControl>
+     
+        <Button type="button" onClick={handleCalculateNetSalary} colorScheme="black"
+      size="md"
+      variant="solid"
+      _hover={{ bg: "black.700" }} border="2px solid black">
           Calculate Net Salary
-        </button>
-      </form>
+        </Button>
+        </Box>
       <br />
-      <h2>Salary Breakdown</h2>
-      <p>
-        NHIF Deduction: <strong>{nhifDeduction}</strong>
-      </p>
-      <p>
-        NSSF Deduction: <strong>{nssfDeduction}</strong>
-      </p>
-      <p>
-        Taxable Income: <strong>{taxableIncome}</strong>
-      </p>
-      <p>
-        Tax Deduction: <strong>{taxDeduction}</strong>
-      </p>
-      <p>
-        Net Salary: <strong>{netSalary}</strong>
-      </p>
-    </div>
+      <Heading color={"grey.100"} fontFamily={"Rampage Monoline"} marginBottom={"2em"} textAlign="center">  
+      <h1>Salary Breakdown</h1>
+      </Heading>
+
+      <Box >
+      <FormControl>
+        <FormLabel border="2px solid black" w={250} h={10}>NHIF Deduction:
+        <strong> {nhifDeduction} </strong></FormLabel><br />
+      </FormControl>
+      </Box>
+
+      <Box >
+      <FormControl>
+        <FormLabel border="2px solid black" w={250} h={10}>NSSF Deduction:
+        <strong> {nssfDeduction} </strong></FormLabel><br />
+      </FormControl>
+      </Box>
+
+      <Box >
+      <FormControl>
+        <FormLabel border="2px solid black" w={250} h={10}>Taxable Income:
+        <strong> {taxableIncome} </strong></FormLabel><br />
+      </FormControl>
+      </Box>
+      <Box >
+      <FormControl>
+        <FormLabel border="2px solid black" w={250} h={10}>Tax Deduction:
+        <strong> {taxDeduction} </strong></FormLabel><br />
+      </FormControl>
+      </Box>
+
+      <Box >
+      <FormControl>
+        <FormLabel border="2px solid black" w={250} h={10}>Net Salary:
+        <strong> {netSalary} </strong></FormLabel><br />
+      </FormControl>
+      </Box>
+      </form>
+    </Box>
+
+
+
+
   );
 }
 
+
+
 export default EmployeeSalary;
+
+
