@@ -1,38 +1,38 @@
 const puppeteer = require('puppeteer');
-const { calculateNetSalary } = require('./salaryUtils');
 
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('http://localhost:3000'); // replace with your app URL
+describe('EmployeeSalary component', () => {
+  let browser;
+  let page;
 
-  // enter the gross salary in the input field
-  await page.type('input[type=number]', '50000');
+  beforeAll(async () => {
+    browser = await puppeteer.launch();
+    page = await browser.newPage();
+    await page.goto('https://salarycalac-app.onrender.com');
+  });
 
-  // click the calculate button
-  await page.click('button');
+  afterAll(async () => {
+    await browser.close();
+  });
 
-  // wait for the salary breakdown to be displayed
-  await page.waitForSelector('h2');
+  it('displays the "Gross Salary" input field', async () => {
+    const grossSalaryInput = await page.$('input[type="text"]');
+    expect(grossSalaryInput).not.toBeNull();
+  });
 
-  // extract the values of the salary breakdown
-  const nhifDeduction = await page.$eval('p:nth-of-type(1) strong', el => el.textContent);
-  const nssfDeduction = await page.$eval('p:nth-of-type(2) strong', el => el.textContent);
-  const taxableIncome = await page.$eval('p:nth-of-type(3) strong', el => el.textContent);
-  const taxDeduction = await page.$eval('p:nth-of-type(4) strong', el => el.textContent);
-  const netSalary = await page.$eval('p:nth-of-type(5) strong', el => el.textContent);
+  it('calculates net salary correctly', async () => {
+    await page.type('input[type="text"]', '50000');
+    await page.click('button[type="button"]');
 
-  // compare the extracted values with the expected values
-  const expectedValues = calculateNetSalary(50000);
-  if (nhifDeduction === expectedValues.nhifDeduction.toString() &&
-      nssfDeduction === expectedValues.nssfDeduction.toString() &&
-      taxableIncome === expectedValues.taxableIncome.toString() &&
-      taxDeduction === expectedValues.taxDeduction.toString() &&
-      netSalary === expectedValues.netSalary.toString()) {
-    console.log('Acceptance test passed!');
-  } else {
-    console.log('Acceptance test failed!');
-  }
+    const nhifDeduction = await page.$eval('label:contains("NHIF Deduction:") strong', el => el.innerText);
+    const nssfDeduction = await page.$eval('label:contains("NSSF Deduction:") strong', el => el.innerText);
+    const taxableIncome = await page.$eval('label:contains("Taxable Income:") strong', el => el.innerText);
+    const taxDeduction = await page.$eval('label:contains("Tax Deduction:") strong', el => el.innerText);
+    const netSalary = await page.$eval('label:contains("Net Salary:") strong', el => el.innerText);
 
-  await browser.close();
-})();
+    expect(nhifDeduction).toBe('500');
+    expect(nssfDeduction).toBe('1100');
+    expect(taxableIncome).toBe('47900');
+    expect(taxDeduction).toBe('7983.33');
+    expect(netSalary).toBe('3916.67');
+  });
+});
